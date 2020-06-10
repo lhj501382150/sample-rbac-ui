@@ -44,7 +44,7 @@ export default function $axios(options) {
         return Promise.reject(error) // 在调用的那边可以拿到(catch)你想返回的错误信息
       }
     )
-    
+
     // response 响应拦截器
     instance.interceptors.response.use(
       response => {
@@ -58,9 +58,13 @@ export default function $axios(options) {
               break
             case 401:
               err.message = '未授权，请登录'
+                sessionStorage.removeItem('user')
+               router.push('/login')
               break
             case 403:
               err.message = '拒绝访问'
+              sessionStorage.removeItem('user')
+              router.push('/login')
               break
             case 404:
               err.message = `请求地址出错: ${err.response.config.url}`

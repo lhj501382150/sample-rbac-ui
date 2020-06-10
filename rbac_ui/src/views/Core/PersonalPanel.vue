@@ -3,47 +3,47 @@
     <div class="personal-desc" :style="{'background':this.$store.state.app.themeColor}">
         <div class="avatar-container">
           <img class="avatar" :src="require('@/assets/user.png')" />
-        </div>  
+        </div>
         <div class="name-role">
-          <span class="sender">{{ user.nickName }} - {{ user.roleNames }}</span>  
-        </div>  
+          <span class="sender">{{ user.nickName }} - {{ user.roleNames }}</span>
+        </div>
         <div class="registe-info">
           <span class="registe-info">
             <li class="fa fa-clock-o"></li>
             {{ this.dateFormat(user.createTime) }}
           </span>
-        </div>  
+        </div>
     </div>
     <div class="personal-relation">
-        <span class="relation-item">followers</span>  
-        <span class="relation-item">watches</span>  
+        <span class="relation-item">followers</span>
+        <span class="relation-item">watches</span>
         <span class="relation-item">friends</span>
     </div>
     <div class="main-operation">
         <span class="main-operation-item" @click="openPersonCenter">
           <el-button size="small" icon="fa fa-male" > 个人中心</el-button>
-        </span>    
+        </span>
         <span class="main-operation-item" @click="openupdatePasswordDialog">
           <el-button size="small" icon="fa fa-key"> 修改密码</el-button>
-        </span>    
+        </span>
     </div>
     <div class="other-operation">
         <div class="other-operation-item" @click="clearCache">
           <li class="fa fa-eraser"></li>
           清除缓存
-        </div>    
+        </div>
         <div class="other-operation-item" @click="openOnlinePage">
           <li class="fa fa-user"></li>
           在线人数 {{onlineUser}}
-        </div>    
+        </div>
         <div class="other-operation-item">
           <li class="fa fa-bell"></li>
           访问次数 {{accessTimes}}
-        </div>    
+        </div>
         <div class="other-operation-item" @click="showBackupDialog">
           <li class="fa fa-undo"></li>
           {{$t("common.backupRestore")}}
-        </div>    
+        </div>
     </div>
     <div class="personal-footer" @click="logout">
       <li class="fa fa-sign-out"></li>
@@ -83,11 +83,13 @@ export default {
   props: {
     user: {
       type: Object,
-      default: {
-        nickName: "admin",
-        avatar: "@/assets/user.png",
-        role: "超级管理员",
-        registeInfo: "注册时间：2018-12-25 "
+      default(){
+          return {
+          nickName: "admin",
+          avatar: "@/assets/user.png",
+          role: "超级管理员",
+          registeInfo: "注册时间：2018-12-25 "
+        }
       }
     }
   },
@@ -180,15 +182,15 @@ export default {
         })
     },
     // 清除Cookie
-    deleteCookie(name){     
-         var myDate = new Date()   
-         myDate.setTime(-1000) // 设置过期时间     
-         document.cookie = name+"=''; expires="+myDate.toGMTString();              
-    },    
+    deleteCookie(name){
+         var myDate = new Date()
+         myDate.setTime(-1000) // 设置过期时间
+         document.cookie = name+"=''; expires="+myDate.toGMTString();
+    },
     // 获取在线用户数
 		countOnlineUser() {
       let pageRequest = { pageNum: 1, pageSize: 10000000 }
-			pageRequest.params = [{name:'status', value:'online'}]
+			pageRequest.params = {status:'online'}
 			this.$api.loginlog.findPage(pageRequest).then((res) => {
 				this.onlineUser = res.data.content.length
 			})
@@ -196,7 +198,7 @@ export default {
     // 获取访问次数
 		countAccessTimes() {
       let pageRequest = { pageNum: 1, pageSize: 10000000 }
-			pageRequest.params = [{name:'status', value:'login'}]
+			pageRequest.params = {status:'login'}
 			this.$api.loginlog.findPage(pageRequest).then((res) => {
 				this.accessTimes = res.data.content.length + 1
 			})
