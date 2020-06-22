@@ -12,6 +12,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import netty.marshalling.utils.GZipUtils;
 import netty.marshalling.utils.RequestMessage;
 import netty.marshalling.utils.SerializableFactoryMarshalling;
 
@@ -65,13 +66,14 @@ public class ClientSerial {
 			String test = "test attahcment";
 			
 			byte[] arr = test.getBytes();
-			RequestMessage msg = new RequestMessage(new Random().nextLong(), "test", new byte[0]);
+			arr = GZipUtils.zip(arr);
+			RequestMessage msg = new RequestMessage(new Random().nextLong(), "test",arr);
 			f.channel().writeAndFlush(msg);
 			
 			TimeUnit.SECONDS.sleep(1);
 			f.addListener(ChannelFutureListener.CLOSE);
 			
-		} catch (InterruptedException e) {
+		}  catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if(f!=null){

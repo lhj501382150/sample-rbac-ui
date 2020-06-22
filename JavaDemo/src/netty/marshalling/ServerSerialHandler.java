@@ -4,6 +4,7 @@ package netty.marshalling;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import netty.marshalling.utils.GZipUtils;
 import netty.marshalling.utils.RequestMessage;
 import netty.marshalling.utils.ResponseMessage;
 /**
@@ -23,9 +24,9 @@ public class ServerSerialHandler extends ChannelInboundHandlerAdapter {
 		 
 		 if(msg instanceof RequestMessage){
 			 RequestMessage request = (RequestMessage)msg;
-//			 byte[] arr = request.getAttache();
-//			 GzipUtils.unZip();
-//			 System.out.println(new String(arr));
+			 byte[] arr = request.getAttache();
+			 arr = GZipUtils.unZip(arr);
+			 System.out.println(new String(arr));
 		 }
 		 
 		 ResponseMessage response = new ResponseMessage(0L,"test respone");
